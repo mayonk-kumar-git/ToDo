@@ -57,7 +57,7 @@ export default function App() {
     },
     {
       id: "5",
-      taskDescription: "Lorem Ipsum is simply dummy text of the printing",
+      taskDescription: "Lorem Ipsum is s",
       status: "deadline",
       deadlineDate: "5",
       deadlineMonth: "February",
@@ -77,6 +77,8 @@ export default function App() {
       <AddTask
         isVisible={addTaskVisibility}
         setIsVisible={setAddTaskVisibility}
+        tasks={tasks}
+        setTasks={setTasks}
       />
       <Text style={styles.heading}>To-do List</Text>
       <FlatList
@@ -86,7 +88,6 @@ export default function App() {
       />
       <TouchableOpacity
         onPress={() => {
-          console.log("Add button pressed");
           setAddTaskVisibility(true);
         }}
         style={styles.addTaskButton}

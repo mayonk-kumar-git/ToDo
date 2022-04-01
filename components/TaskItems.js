@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   taskDesc: {
+    flex: 1,
     fontSize: 16,
     margin: 10,
     maxWidth: "75%",
