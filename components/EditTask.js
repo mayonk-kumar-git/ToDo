@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import {
   View,
   Text,
@@ -62,6 +62,8 @@ export default function EditTask({
   const [datepickerDate, setDatepickerDate] = useState(new Date());
 
   function onChangeDate(event, selectedDate) {
+    //[IMPORTANT]: This setShowDatePicker should be the first line of this function, because the useState is a async function so if it is written at the end then it will asyncly update the value which will reasult in a glitchy effect when pressed the ok of the calender
+    setShowDatePicker(false);
     const month = [
       "January",
       "February",
@@ -81,7 +83,7 @@ export default function EditTask({
     setNewDeadlineDate(pickedDate.getDate());
     setNewDeadlineMonth(month[pickedDate.getMonth()]);
     setNewDeadlineYear(pickedDate.getFullYear());
-    setShowDatePicker(false);
+    // setShowDatePicker(false);
     // console.log("showDatePicker : ", showDatePicker);
   }
   // the below code is used to check the radio button option initially

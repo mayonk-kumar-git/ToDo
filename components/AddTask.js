@@ -48,6 +48,8 @@ export default function AddTask({ isVisible, setIsVisible, tasks, setTasks }) {
   const [datepickerDate, setDatepickerDate] = useState(new Date());
 
   function onChangeDate(event, selectedDate) {
+    //[IMPORTANT]: This setShowDatePicker should be the first line of this function, because the useState is a async function so if it is written at the end then it will asyncly update the value which will reasult in a glitchy effect when pressed the ok of the calender
+    setShowDatePicker(false);
     const month = [
       "January",
       "February",
@@ -67,7 +69,7 @@ export default function AddTask({ isVisible, setIsVisible, tasks, setTasks }) {
     setDeadlineDate(pickedDate.getDate());
     setDeadlineMonth(month[pickedDate.getMonth()]);
     setDeadlineYear(pickedDate.getFullYear());
-    setShowDatePicker(false);
+    // setShowDatePicker(false);
   }
 
   function addTaskToList() {
