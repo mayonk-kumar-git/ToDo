@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   Text,
@@ -54,7 +54,7 @@ export default function EditTask({
 }) {
   if (!clickedTaskId) return <></>;
 
-  // the below code will check the radio button
+  // the below code is used to check the radio button option initially
   var initialRadioButtonState;
   for (let i = 0; i < statusTypes.length; ++i) {
     if (statusTypes[i].statusLabel === newTaskStatus) {

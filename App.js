@@ -23,62 +23,62 @@ export default function App() {
   const [editTaskVisibility, setEditTaskVisibility] = useState(false);
   const [clickedTaskId, setClickedTaskId] = useState(null);
   const [tasks, setTasks] = useState([
-    {
-      id: "0",
-      taskDescription: "Lorem Ipsum is simply dummy text of the printing",
-      status: "pending",
-      deadlineDate: "5",
-      deadlineMonth: "February",
-      deadlineYear: "2022",
-    },
-    {
-      id: "1",
-      taskDescription: "Lorem Ipsum is simply dummy text of the printing",
-      status: "cancelled",
-      deadlineDate: "5",
-      deadlineMonth: "February",
-      deadlineYear: "2022",
-    },
-    {
-      id: "2",
-      taskDescription: "Lorem Ipsum is simply dummy text of the printing",
-      status: "done",
-      deadlineDate: "5",
-      deadlineMonth: "February",
-      deadlineYear: "2022",
-    },
-    {
-      id: "3",
-      taskDescription: "Lorem Ipsum is simply dummy text of the printing",
-      status: "todo",
-      deadlineDate: "5",
-      deadlineMonth: "February",
-      deadlineYear: "2022",
-    },
-    {
-      id: "4",
-      taskDescription: "Lorem Ipsum is simply dummy text of the printing",
-      status: "progress",
-      deadlineDate: "5",
-      deadlineMonth: "February",
-      deadlineYear: "2022",
-    },
-    {
-      id: "5",
-      taskDescription: "Lorem Ipsum is s",
-      status: "deadline",
-      deadlineDate: "5",
-      deadlineMonth: "February",
-      deadlineYear: "2022",
-    },
-    {
-      id: "6",
-      taskDescription: "Lorem Ipsum is simply dummy text of the printing",
-      status: "deadline",
-      deadlineDate: "5",
-      deadlineMonth: "February",
-      deadlineYear: "2022",
-    },
+    // {
+    //   id: "0",
+    //   taskDescription: "Lorem Ipsum is simply dummy text of the printing",
+    //   status: "pending",
+    //   deadlineDate: "5",
+    //   deadlineMonth: "February",
+    //   deadlineYear: "2022",
+    // },
+    // {
+    //   id: "1",
+    //   taskDescription: "Lorem Ipsum is simply dummy text of the printing",
+    //   status: "cancelled",
+    //   deadlineDate: "5",
+    //   deadlineMonth: "February",
+    //   deadlineYear: "2022",
+    // },
+    // {
+    //   id: "2",
+    //   taskDescription: "Lorem Ipsum is simply dummy text of the printing",
+    //   status: "done",
+    //   deadlineDate: "5",
+    //   deadlineMonth: "February",
+    //   deadlineYear: "2022",
+    // },
+    // {
+    //   id: "3",
+    //   taskDescription: "Lorem Ipsum is simply dummy text of the printing",
+    //   status: "todo",
+    //   deadlineDate: "5",
+    //   deadlineMonth: "February",
+    //   deadlineYear: "2022",
+    // },
+    // {
+    //   id: "4",
+    //   taskDescription: "Lorem Ipsum is simply dummy text of the printing",
+    //   status: "progress",
+    //   deadlineDate: "5",
+    //   deadlineMonth: "February",
+    //   deadlineYear: "2022",
+    // },
+    // {
+    //   id: "5",
+    //   taskDescription: "Lorem Ipsum is s",
+    //   status: "deadline",
+    //   deadlineDate: "5",
+    //   deadlineMonth: "February",
+    //   deadlineYear: "2022",
+    // },
+    // {
+    //   id: "6",
+    //   taskDescription: "Lorem Ipsum is simply dummy text of the printing",
+    //   status: "deadline",
+    //   deadlineDate: "5",
+    //   deadlineMonth: "February",
+    //   deadlineYear: "2022",
+    // },
   ]);
   return (
     <View style={styles.container}>
@@ -106,6 +106,11 @@ export default function App() {
         setNewTaskStatus={setNewTaskStatus}
       />
       <Text style={styles.heading}>To-do List</Text>
+      {tasks.length === 0 ? (
+        <Text style={styles.noTaskWatermark}>No Task to complete!!</Text>
+      ) : (
+        <></>
+      )}
       <FlatList
         data={tasks}
         renderItem={({ item }) => (
@@ -148,8 +153,15 @@ const styles = StyleSheet.create({
   },
   heading: {
     marginTop: 40,
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "bold",
+  },
+  noTaskWatermark: {
+    fontSize: 20,
+    color: "#B0B0B0",
+    position: "absolute",
+    top: 400,
+    left: 120,
   },
   addTaskButton: {
     position: "absolute",
