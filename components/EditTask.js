@@ -35,14 +35,35 @@ const statusTypes = [
   },
 ];
 
-export default function AddTask({ isVisible, setIsVisible, tasks, setTasks }) {
-  const [deadlineDate, setDeadlineDate] = useState("");
-  const [deadlineMonth, setDeadlineMonth] = useState("");
-  const [deadlineYear, setDeadlineYear] = useState("");
-  const [taskDesc, setTaskDesc] = useState("");
-  const [taskStatus, setTaskStatus] = React.useState("todo");
+export default function EditTask({
+  isVisible,
+  setIsVisible,
+  tasks,
+  setTasks,
+  clickedTaskId,
+  newDeadlineDate,
+  setNewDeadlineDate,
+  newDeadlineMonth,
+  setNewDeadlineMonth,
+  newDeadlineYear,
+  setNewDeadlineYear,
+  newTaskDesc,
+  setNewTaskDesc,
+  newTaskStatus,
+  setNewTaskStatus,
+}) {
+  if (!clickedTaskId) return <></>;
 
-  function addTaskToList() {
+  // the below code will check the radio button
+  var initialRadioButtonState;
+  for (let i = 0; i < statusTypes.length; ++i) {
+    if (statusTypes[i].statusLabel === newTaskStatus) {
+      initialRadioButtonState = i + 1;
+      break;
+    }
+  }
+
+  function saveTaskToList() {
     if (taskDesc === "") {
       alert("Task Field can't be empty");
       return;
@@ -75,27 +96,21 @@ export default function AddTask({ isVisible, setIsVisible, tasks, setTasks }) {
         deadlineYear: deadlineYear,
       },
     ];
-    setDeadlineDate("");
-    setDeadlineMonth("");
-    setDeadlineYear("");
-    setTaskDesc("");
-    setTaskStatus("todo");
-
     setTasks(newTaskList);
     setIsVisible(false);
   }
   return (
     <Modal animationType="fade" transparent={true} visible={isVisible}>
       <View style={styles.container}>
-        <View style={styles.addTaskContainer}>
+        <View style={styles.editTaskContainer}>
           <Text style={styles.label}>Task</Text>
           <TextInput
             style={styles.taskInput}
             multiline={true}
             onChangeText={(text) => {
-              setTaskDesc(text);
+              setNewTaskDesc(text);
             }}
-            value={taskDesc}
+            value={newTaskDesc}
             placeholder="What do you plan to do..."
             keyboardType="default"
           />
@@ -104,20 +119,20 @@ export default function AddTask({ isVisible, setIsVisible, tasks, setTasks }) {
             data={statusTypes}
             selectedBtn={(e) => {
               // console.log(e.statusLabel);
-              setTaskStatus(e.statusLabel);
+              setNewTaskStatus(e.statusLabel);
             }}
             box={false}
-            initial={1}
+            initial={initialRadioButtonState}
           />
-          {taskStatus === "deadline" ? (
+          {newTaskStatus === "deadline" ? (
             <View style={styles.datePicker}>
               <TextInput
                 style={{ ...styles.datePickerInput, flex: 1 }}
                 maxLength={2}
                 onChangeText={(date) => {
-                  setDeadlineDate(date);
+                  setNewDeadlineDate(date);
                 }}
-                value={deadlineDate}
+                value={newDeadlineDate}
                 placeholder="Date"
                 keyboardType="number-pad"
               />
@@ -125,9 +140,9 @@ export default function AddTask({ isVisible, setIsVisible, tasks, setTasks }) {
                 style={{ ...styles.datePickerInput, flex: 4 }}
                 maxLength={10}
                 onChangeText={(month) => {
-                  setDeadlineMonth(month);
+                  setNewDeadlineMonth(month);
                 }}
-                value={deadlineMonth}
+                value={newDeadlineMonth}
                 placeholder="Month"
                 keyboardType="default"
               />
@@ -135,9 +150,9 @@ export default function AddTask({ isVisible, setIsVisible, tasks, setTasks }) {
                 style={{ ...styles.datePickerInput, flex: 2 }}
                 maxLength={4}
                 onChangeText={(year) => {
-                  setDeadlineYear(year);
+                  setNewDeadlineYear(year);
                 }}
-                value={deadlineYear}
+                value={newDeadlineYear}
                 placeholder="Year"
                 keyboardType="number-pad"
               />
@@ -147,12 +162,12 @@ export default function AddTask({ isVisible, setIsVisible, tasks, setTasks }) {
           )}
           <View style={styles.actionButtonContainer}>
             <TouchableOpacity
-              style={styles.actionButtonAdd}
+              style={styles.actionButtonSave}
               onPress={() => {
-                addTaskToList();
+                saveTaskToList();
               }}
             >
-              <Text style={styles.actionButtonText}>Add</Text>
+              <Text style={styles.actionButtonText}>Save</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.actionButtonCancle}
@@ -161,6 +176,14 @@ export default function AddTask({ isVisible, setIsVisible, tasks, setTasks }) {
               }}
             >
               <Text style={styles.actionButtonText}>Cancle</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.actionButtonDelete}
+              onPress={() => {
+                setIsVisible(false);
+              }}
+            >
+              <Text style={styles.actionButtonText}>Delete</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -175,7 +198,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  addTaskContainer: {
+  editTaskContainer: {
     backgroundColor: "#fff",
     paddingVertical: 30,
     paddingHorizontal: 20,
@@ -219,7 +242,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
   },
-  actionButtonAdd: {
+  actionButtonSave: {
     backgroundColor: "#2AD400",
     paddingVertical: 10,
     paddingHorizontal: 20,
@@ -227,6 +250,13 @@ const styles = StyleSheet.create({
   },
   actionButtonCancle: {
     backgroundColor: "#8A96FF",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    marginHorizontal: 35,
+  },
+  actionButtonDelete: {
+    backgroundColor: "#FF2E2E",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,

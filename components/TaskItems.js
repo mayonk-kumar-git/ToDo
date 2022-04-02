@@ -24,7 +24,16 @@ function StatusIcon({ status }) {
   }
 }
 
-export default function TaskItems({ task }) {
+export default function TaskItems({
+  task,
+  setIsVisible,
+  setClickedTaskId,
+  setNewDeadlineDate,
+  setNewDeadlineMonth,
+  setNewDeadlineYear,
+  setNewTaskDesc,
+  setNewTaskStatus,
+}) {
   return (
     <View style={styles.container}>
       {task.status === "deadline" ? (
@@ -41,6 +50,13 @@ export default function TaskItems({ task }) {
       <TouchableOpacity
         onPress={() => {
           console.log(task.id);
+          setIsVisible(true);
+          setClickedTaskId(task.id);
+          setNewDeadlineDate(task.deadlineDate);
+          setNewDeadlineMonth(task.deadlineMonth);
+          setNewDeadlineYear(task.deadlineYear);
+          setNewTaskDesc(task.taskDescription);
+          setNewTaskStatus(task.status);
         }}
       >
         <Image source={require("../Icons/More.png")} />

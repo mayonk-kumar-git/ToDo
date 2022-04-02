@@ -10,10 +10,18 @@ import {
 // -------------------------------------------------
 import TaskItems from "./components/TaskItems";
 import AddTask from "./components/AddTask";
+import EditTask from "./components/EditTask.js";
 // -------------------------------------------------
 
 export default function App() {
+  const [newDeadlineDate, setNewDeadlineDate] = useState("");
+  const [newDeadlineMonth, setNewDeadlineMonth] = useState("");
+  const [newDeadlineYear, setNewDeadlineYear] = useState("");
+  const [newTaskDesc, setNewTaskDesc] = useState("");
+  const [newTaskStatus, setNewTaskStatus] = React.useState("todo");
   const [addTaskVisibility, setAddTaskVisibility] = useState(false);
+  const [editTaskVisibility, setEditTaskVisibility] = useState(false);
+  const [clickedTaskId, setClickedTaskId] = useState(null);
   const [tasks, setTasks] = useState([
     {
       id: "0",
@@ -80,10 +88,41 @@ export default function App() {
         tasks={tasks}
         setTasks={setTasks}
       />
+      <EditTask
+        isVisible={editTaskVisibility}
+        setIsVisible={setEditTaskVisibility}
+        tasks={tasks}
+        setTasks={setTasks}
+        clickedTaskId={clickedTaskId}
+        newDeadlineDate={newDeadlineDate}
+        setNewDeadlineDate={setNewDeadlineDate}
+        newDeadlineMonth={newDeadlineMonth}
+        setNewDeadlineMonth={setNewDeadlineMonth}
+        newDeadlineYear={newDeadlineYear}
+        setNewDeadlineYear={setNewDeadlineYear}
+        newTaskDesc={newTaskDesc}
+        setNewTaskDesc={setNewTaskDesc}
+        newTaskStatus={newTaskStatus}
+        setNewTaskStatus={setNewTaskStatus}
+      />
       <Text style={styles.heading}>To-do List</Text>
       <FlatList
         data={tasks}
-        renderItem={({ item }) => <TaskItems task={item} />}
+        renderItem={({ item }) => (
+          <TaskItems
+            task={item}
+            isVisible={editTaskVisibility}
+            setIsVisible={setEditTaskVisibility}
+            tasks={tasks}
+            setTasks={setTasks}
+            setClickedTaskId={setClickedTaskId}
+            setNewDeadlineDate={setNewDeadlineDate}
+            setNewDeadlineMonth={setNewDeadlineMonth}
+            setNewDeadlineYear={setNewDeadlineYear}
+            setNewTaskDesc={setNewTaskDesc}
+            setNewTaskStatus={setNewTaskStatus}
+          />
+        )}
         keyExtractor={(task) => task.id}
       />
       <TouchableOpacity
