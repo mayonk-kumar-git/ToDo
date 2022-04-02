@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -7,7 +7,11 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
+// -------------------------------------------------
 import RadioButtonRN from "radio-buttons-react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
+// -------------------------------------------------
+
 const statusTypes = [
   {
     label: "To do",
@@ -54,6 +58,32 @@ export default function EditTask({
 }) {
   if (!clickedTaskId) return <></>;
 
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [datepickerDate, setDatepickerDate] = useState(new Date());
+
+  function onChangeDate(event, selectedDate) {
+    const month = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    const pickedDate = selectedDate || datepickerDate;
+    setDatepickerDate(pickedDate);
+    setNewDeadlineDate(pickedDate.getDate());
+    setNewDeadlineMonth(month[pickedDate.getMonth()]);
+    setNewDeadlineYear(pickedDate.getFullYear());
+    setShowDatePicker(false);
+    // console.log("showDatePicker : ", showDatePicker);
+  }
   // the below code is used to check the radio button option initially
   var initialRadioButtonState;
   for (let i = 0; i < statusTypes.length; ++i) {
@@ -108,6 +138,11 @@ export default function EditTask({
 
   return (
     <Modal animationType="fade" transparent={true} visible={isVisible}>
+      {showDatePicker ? (
+        <DateTimePicker value={datepickerDate} onChange={onChangeDate} />
+      ) : (
+        <></>
+      )}
       <View style={styles.container}>
         <View style={styles.editTaskContainer}>
           <Text style={styles.label}>Task</Text>
@@ -131,41 +166,27 @@ export default function EditTask({
             initial={initialRadioButtonState}
           />
           {newTaskStatus === "deadline" ? (
-            <View style={styles.datePicker}>
-              <TextInput
-                style={{ ...styles.datePickerInput, flex: 1 }}
-                maxLength={2}
-                onChangeText={(date) => {
-                  setNewDeadlineDate(date);
-                }}
-                value={newDeadlineDate}
-                placeholder="Date"
-                keyboardType="number-pad"
-              />
-              <TextInput
-                style={{ ...styles.datePickerInput, flex: 4 }}
-                maxLength={10}
-                onChangeText={(month) => {
-                  setNewDeadlineMonth(month);
-                }}
-                value={newDeadlineMonth}
-                placeholder="Month"
-                keyboardType="default"
-              />
-              <TextInput
-                style={{ ...styles.datePickerInput, flex: 2 }}
-                maxLength={4}
-                onChangeText={(year) => {
-                  setNewDeadlineYear(year);
-                }}
-                value={newDeadlineYear}
-                placeholder="Year"
-                keyboardType="number-pad"
-              />
-            </View>
+            <TouchableOpacity
+              onPress={() => {
+                setShowDatePicker(true);
+              }}
+            >
+              <View style={styles.datePicker}>
+                <Text style={{ ...styles.datePickerDisplay, flex: 1 }}>
+                  {newDeadlineDate}
+                </Text>
+                <Text style={{ ...styles.datePickerDisplay, flex: 3 }}>
+                  {newDeadlineMonth}
+                </Text>
+                <Text style={{ ...styles.datePickerDisplay, flex: 2 }}>
+                  {newDeadlineYear}
+                </Text>
+              </View>
+            </TouchableOpacity>
           ) : (
             <></>
           )}
+
           <View style={styles.actionButtonContainer}>
             <TouchableOpacity
               style={styles.actionButtonSave}
@@ -233,12 +254,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 10,
   },
-  datePickerInput: {
+  datePickerDisplay: {
     borderWidth: 1,
+    justifyContent: "center",
+    alignItems: "center",
     borderColor: "#C8C8C8",
     backgroundColor: "#C8C8C8",
     borderRadius: 10,
-    paddingHorizontal: 10,
+    padding: 10,
     marginVertical: 10,
     marginHorizontal: 5,
   },

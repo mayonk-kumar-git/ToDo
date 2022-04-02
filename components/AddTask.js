@@ -9,6 +9,7 @@ import {
 } from "react-native";
 // -------------------------------------------------
 import RadioButtonRN from "radio-buttons-react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
 // -------------------------------------------------
 const statusTypes = [
   {
@@ -38,30 +39,41 @@ const statusTypes = [
 ];
 
 export default function AddTask({ isVisible, setIsVisible, tasks, setTasks }) {
-  const [deadlineDate, setDeadlineDate] = useState("");
-  const [deadlineMonth, setDeadlineMonth] = useState("");
-  const [deadlineYear, setDeadlineYear] = useState("");
+  const [deadlineDate, setDeadlineDate] = useState("Date");
+  const [deadlineMonth, setDeadlineMonth] = useState("Month");
+  const [deadlineYear, setDeadlineYear] = useState("Year");
   const [taskDesc, setTaskDesc] = useState("");
   const [taskStatus, setTaskStatus] = React.useState("todo");
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [datepickerDate, setDatepickerDate] = useState(new Date());
+
+  function onChangeDate(event, selectedDate) {
+    const month = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    const pickedDate = selectedDate || datepickerDate;
+    setDatepickerDate(pickedDate);
+    setDeadlineDate(pickedDate.getDate());
+    setDeadlineMonth(month[pickedDate.getMonth()]);
+    setDeadlineYear(pickedDate.getFullYear());
+    setShowDatePicker(false);
+  }
 
   function addTaskToList() {
     if (taskDesc === "") {
       alert("Task Field can't be empty");
       return;
-    }
-    if (taskStatus === "deadline") {
-      if (deadlineDate === "") {
-        alert("Date Fields can't be empty");
-        return;
-      }
-      if (deadlineMonth === "") {
-        alert("Month Fields can't be empty");
-        return;
-      }
-      if (deadlineYear === "") {
-        alert("Year Fields can't be empty");
-        return;
-      }
     }
     // since all the tasks must have a unique id
     const curdate = new Date();
@@ -88,6 +100,11 @@ export default function AddTask({ isVisible, setIsVisible, tasks, setTasks }) {
   }
   return (
     <Modal animationType="fade" transparent={true} visible={isVisible}>
+      {showDatePicker ? (
+        <DateTimePicker value={datepickerDate} onChange={onChangeDate} />
+      ) : (
+        <></>
+      )}
       <View style={styles.container}>
         <View style={styles.addTaskContainer}>
           <Text style={styles.label}>Task</Text>
@@ -112,38 +129,24 @@ export default function AddTask({ isVisible, setIsVisible, tasks, setTasks }) {
             initial={1}
           />
           {taskStatus === "deadline" ? (
-            <View style={styles.datePicker}>
-              <TextInput
-                style={{ ...styles.datePickerInput, flex: 1 }}
-                maxLength={2}
-                onChangeText={(date) => {
-                  setDeadlineDate(date);
-                }}
-                value={deadlineDate}
-                placeholder="Date"
-                keyboardType="number-pad"
-              />
-              <TextInput
-                style={{ ...styles.datePickerInput, flex: 4 }}
-                maxLength={10}
-                onChangeText={(month) => {
-                  setDeadlineMonth(month);
-                }}
-                value={deadlineMonth}
-                placeholder="Month"
-                keyboardType="default"
-              />
-              <TextInput
-                style={{ ...styles.datePickerInput, flex: 2 }}
-                maxLength={4}
-                onChangeText={(year) => {
-                  setDeadlineYear(year);
-                }}
-                value={deadlineYear}
-                placeholder="Year"
-                keyboardType="number-pad"
-              />
-            </View>
+            <TouchableOpacity
+              onPress={() => {
+                setShowDatePicker(true);
+                // console.log("date time was pressed ", showDatePicker);
+              }}
+            >
+              <View style={styles.datePicker}>
+                <Text style={{ ...styles.datePickerDisplay, flex: 1 }}>
+                  {deadlineDate}
+                </Text>
+                <Text style={{ ...styles.datePickerDisplay, flex: 3 }}>
+                  {deadlineMonth}
+                </Text>
+                <Text style={{ ...styles.datePickerDisplay, flex: 2 }}>
+                  {deadlineYear}
+                </Text>
+              </View>
+            </TouchableOpacity>
           ) : (
             <></>
           )}
@@ -206,12 +209,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 10,
   },
-  datePickerInput: {
+  datePickerDisplay: {
     borderWidth: 1,
+    justifyContent: "center",
+    alignItems: "center",
     borderColor: "#C8C8C8",
     backgroundColor: "#C8C8C8",
     borderRadius: 10,
-    paddingHorizontal: 10,
+    padding: 10,
     marginVertical: 10,
     marginHorizontal: 5,
   },

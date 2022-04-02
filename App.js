@@ -31,9 +31,9 @@ export default function App() {
     AsyncStorage.setItem("taskList", JSON.stringify(tasks));
   });
 
-  const [newDeadlineDate, setNewDeadlineDate] = useState("");
-  const [newDeadlineMonth, setNewDeadlineMonth] = useState("");
-  const [newDeadlineYear, setNewDeadlineYear] = useState("");
+  const [newDeadlineDate, setNewDeadlineDate] = useState("Date");
+  const [newDeadlineMonth, setNewDeadlineMonth] = useState("Month");
+  const [newDeadlineYear, setNewDeadlineYear] = useState("Year");
   const [newTaskDesc, setNewTaskDesc] = useState("");
   const [newTaskStatus, setNewTaskStatus] = React.useState("todo");
   const [addTaskVisibility, setAddTaskVisibility] = useState(false);
