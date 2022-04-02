@@ -64,41 +64,48 @@ export default function EditTask({
   }
 
   function saveTaskToList() {
-    if (taskDesc === "") {
+    if (newTaskDesc === "") {
       alert("Task Field can't be empty");
       return;
     }
-    if (taskStatus === "deadline") {
-      if (deadlineDate === "") {
+    if (newTaskStatus === "deadline") {
+      if (newDeadlineDate === "") {
         alert("Date Fields can't be empty");
         return;
       }
-      if (deadlineMonth === "") {
+      if (newDeadlineMonth === "") {
         alert("Month Fields can't be empty");
         return;
       }
-      if (deadlineYear === "") {
+      if (newDeadlineYear === "") {
         alert("Year Fields can't be empty");
         return;
       }
     }
-    // since all the tasks must have a unique id
-    const curdate = new Date();
-    const id = curdate.toString();
-    const newTaskList = [
-      ...tasks,
-      {
-        id: id,
-        taskDescription: taskDesc,
-        status: taskStatus,
-        deadlineDate: deadlineDate,
-        deadlineMonth: deadlineMonth,
-        deadlineYear: deadlineYear,
-      },
-    ];
+
+    const index = tasks.findIndex((task) => task.id === clickedTaskId);
+
+    var newTaskList = tasks;
+    newTaskList[index] = {
+      id: clickedTaskId,
+      taskDescription: newTaskDesc,
+      status: newTaskStatus,
+      deadlineDate: newDeadlineDate,
+      deadlineMonth: newDeadlineMonth,
+      deadlineYear: newDeadlineYear,
+    };
     setTasks(newTaskList);
     setIsVisible(false);
   }
+
+  function deleteTask() {
+    const newTaskList = tasks.filter((task) => {
+      if (task.id !== clickedTaskId) return task;
+    });
+    setTasks(newTaskList);
+    setIsVisible(false);
+  }
+
   return (
     <Modal animationType="fade" transparent={true} visible={isVisible}>
       <View style={styles.container}>
@@ -118,7 +125,6 @@ export default function EditTask({
           <RadioButtonRN
             data={statusTypes}
             selectedBtn={(e) => {
-              // console.log(e.statusLabel);
               setNewTaskStatus(e.statusLabel);
             }}
             box={false}
@@ -180,7 +186,7 @@ export default function EditTask({
             <TouchableOpacity
               style={styles.actionButtonDelete}
               onPress={() => {
-                setIsVisible(false);
+                deleteTask();
               }}
             >
               <Text style={styles.actionButtonText}>Delete</Text>

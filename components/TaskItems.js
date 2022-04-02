@@ -49,7 +49,7 @@ export default function TaskItems({
       <Text style={styles.taskDesc}>{task.taskDescription}</Text>
       <TouchableOpacity
         onPress={() => {
-          console.log(task.id);
+          // console.log(task.id);
           setIsVisible(true);
           setClickedTaskId(task.id);
           setNewDeadlineDate(task.deadlineDate);
