@@ -7,7 +7,9 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
+// -------------------------------------------------
 import RadioButtonRN from "radio-buttons-react-native";
+// -------------------------------------------------
 const statusTypes = [
   {
     label: "To do",

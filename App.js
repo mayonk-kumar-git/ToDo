@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
@@ -8,12 +8,29 @@ import {
   TouchableOpacity,
 } from "react-native";
 // -------------------------------------------------
+import AsyncStorage from "@react-native-async-storage/async-storage";
+// -------------------------------------------------
 import TaskItems from "./components/TaskItems";
 import AddTask from "./components/AddTask";
 import EditTask from "./components/EditTask.js";
 // -------------------------------------------------
 
 export default function App() {
+  useEffect(() => {
+    AsyncStorage.getItem("taskList").then((value) => {
+      if (value === null) {
+        AsyncStorage.setItem("taskList", "[]");
+        setTasks([]);
+      } else {
+        setTasks(JSON.parse(value));
+      }
+    });
+  }, []);
+  useEffect(() => {
+    // console.log("storing the data : ", JSON.stringify(tasks));
+    AsyncStorage.setItem("taskList", JSON.stringify(tasks));
+  });
+
   const [newDeadlineDate, setNewDeadlineDate] = useState("");
   const [newDeadlineMonth, setNewDeadlineMonth] = useState("");
   const [newDeadlineYear, setNewDeadlineYear] = useState("");
@@ -22,64 +39,7 @@ export default function App() {
   const [addTaskVisibility, setAddTaskVisibility] = useState(false);
   const [editTaskVisibility, setEditTaskVisibility] = useState(false);
   const [clickedTaskId, setClickedTaskId] = useState(null);
-  const [tasks, setTasks] = useState([
-    // {
-    //   id: "0",
-    //   taskDescription: "Lorem Ipsum is simply dummy text of the printing",
-    //   status: "pending",
-    //   deadlineDate: "5",
-    //   deadlineMonth: "February",
-    //   deadlineYear: "2022",
-    // },
-    // {
-    //   id: "1",
-    //   taskDescription: "Lorem Ipsum is simply dummy text of the printing",
-    //   status: "cancelled",
-    //   deadlineDate: "5",
-    //   deadlineMonth: "February",
-    //   deadlineYear: "2022",
-    // },
-    // {
-    //   id: "2",
-    //   taskDescription: "Lorem Ipsum is simply dummy text of the printing",
-    //   status: "done",
-    //   deadlineDate: "5",
-    //   deadlineMonth: "February",
-    //   deadlineYear: "2022",
-    // },
-    // {
-    //   id: "3",
-    //   taskDescription: "Lorem Ipsum is simply dummy text of the printing",
-    //   status: "todo",
-    //   deadlineDate: "5",
-    //   deadlineMonth: "February",
-    //   deadlineYear: "2022",
-    // },
-    // {
-    //   id: "4",
-    //   taskDescription: "Lorem Ipsum is simply dummy text of the printing",
-    //   status: "progress",
-    //   deadlineDate: "5",
-    //   deadlineMonth: "February",
-    //   deadlineYear: "2022",
-    // },
-    // {
-    //   id: "5",
-    //   taskDescription: "Lorem Ipsum is s",
-    //   status: "deadline",
-    //   deadlineDate: "5",
-    //   deadlineMonth: "February",
-    //   deadlineYear: "2022",
-    // },
-    // {
-    //   id: "6",
-    //   taskDescription: "Lorem Ipsum is simply dummy text of the printing",
-    //   status: "deadline",
-    //   deadlineDate: "5",
-    //   deadlineMonth: "February",
-    //   deadlineYear: "2022",
-    // },
-  ]);
+  const [tasks, setTasks] = useState([]);
   return (
     <View style={styles.container}>
       <AddTask
