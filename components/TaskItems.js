@@ -35,9 +35,11 @@ export default function TaskItems({
   setNewTaskStatus,
 }) {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, styles.shadowEffect]}>
       {task.status === "deadline" ? (
-        <View style={styles.deadlineDateMonthYearWrapper}>
+        <View
+          style={[styles.deadlineDateMonthYearWrapper, styles.shadowEffect]}
+        >
           <Text
             style={styles.deadlineDateMonthYearText}
           >{`${task.deadlineDate} ${task.deadlineMonth}, ${task.deadlineYear} `}</Text>
@@ -94,5 +96,17 @@ const styles = StyleSheet.create({
   },
   deadlineDateMonthYearText: {
     color: "white",
+  },
+  shadowEffect: {
+    ...Platform.select({
+      ios: {
+        shadowColor: rgba(0, 0, 0),
+        shadowOpacity: 0.5,
+        shadowRadius: 5,
+      },
+      android: {
+        elevation: 5,
+      },
+    }),
   },
 });

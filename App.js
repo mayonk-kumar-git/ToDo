@@ -6,6 +6,7 @@ import {
   View,
   FlatList,
   TouchableOpacity,
+  Image,
 } from "react-native";
 // -------------------------------------------------
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -42,6 +43,12 @@ export default function App() {
   const [tasks, setTasks] = useState([]);
   return (
     <View style={styles.container}>
+      <Image
+        style={styles.backgroundImage}
+        source={require("./assets/backgroundImage.jpg")}
+        blurRadius={50}
+        resizeMode="contain"
+      />
       <AddTask
         isVisible={addTaskVisibility}
         setIsVisible={setAddTaskVisibility}
@@ -73,6 +80,8 @@ export default function App() {
       )}
       <FlatList
         data={tasks}
+        contentContainerStyle={{ padding: 10 }}
+        showsHorizontalScrollIndicator={false}
         renderItem={({ item }) => (
           <TaskItems
             task={item}
@@ -96,7 +105,7 @@ export default function App() {
         }}
         style={styles.addTaskButton}
       >
-        <View style={styles.addTaskButtonContainer}>
+        <View style={[styles.addTaskButtonContainer, styles.shadowEffect]}>
           <Text style={styles.addTaskButtonText}>+</Text>
         </View>
       </TouchableOpacity>
@@ -111,10 +120,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#E5E5E5",
     padding: 20,
   },
+  backgroundImage: {
+    position: "absolute",
+  },
   heading: {
     marginTop: 40,
     fontSize: 28,
     fontWeight: "bold",
+    marginLeft: 15,
   },
   noTaskWatermark: {
     fontSize: 20,
@@ -139,5 +152,17 @@ const styles = StyleSheet.create({
   addTaskButtonText: {
     fontSize: 30,
     fontWeight: "bold",
+  },
+  shadowEffect: {
+    ...Platform.select({
+      ios: {
+        shadowColor: rgba(0, 0, 0),
+        shadowOpacity: 0.5,
+        shadowRadius: 5,
+      },
+      android: {
+        elevation: 5,
+      },
+    }),
   },
 });
